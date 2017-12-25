@@ -36,6 +36,7 @@ class PageView: UIScrollView {
   lazy var loadingIndicator: UIView = LightboxConfig.makeLoadingIndicator()
 
   var image: LightboxImage
+  var isLoadingImage: Bool = false
   var contentFrame = CGRect.zero
   weak var pageViewDelegate: PageViewDelegate?
 
@@ -48,23 +49,8 @@ class PageView: UIScrollView {
   init(image: LightboxImage) {
     self.image = image
     super.init(frame: CGRect.zero)
-
     configure()
-
     loadingIndicator.alpha = 1
-    self.image.addImageTo(imageView) { [weak self] image in
-      guard let strongSelf = self else {
-        return
-      }
-
-      strongSelf.isUserInteractionEnabled = true
-      strongSelf.configureImageView()
-      strongSelf.pageViewDelegate?.remoteImageDidLoad(image, imageView: strongSelf.imageView)
-
-      UIView.animate(withDuration: 0.4) {
-        strongSelf.loadingIndicator.alpha = 0
-      }
-    }
   }
 
   required init?(coder aDecoder: NSCoder) {
@@ -72,6 +58,16 @@ class PageView: UIScrollView {
   }
 
   // MARK: - Configuration
+
+  internal func onImageLoaded(image: UIImage?) {
+    self.isUserInteractionEnabled = true
+    self.configureImageView()
+    self.pageViewDelegate?.remoteImageDidLoad(image, imageView: self.imageView)
+
+    UIView.animate(withDuration: 0.4) {
+      self.loadingIndicator.alpha = 0
+    }
+  }
 
   func configure() {
     addSubview(imageView)
