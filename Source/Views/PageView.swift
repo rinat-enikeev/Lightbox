@@ -63,10 +63,7 @@ class PageView: UIScrollView {
     self.isUserInteractionEnabled = true
     self.configureImageView()
     self.pageViewDelegate?.remoteImageDidLoad(image, imageView: self.imageView)
-
-    UIView.animate(withDuration: 0.4) {
-      self.loadingIndicator.alpha = 0
-    }
+    self.loadingIndicator.alpha = 0
   }
 
   func configure() {
