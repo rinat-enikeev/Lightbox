@@ -93,6 +93,20 @@ open class LightboxController: UIViewController {
 
       pageDelegate?.lightboxController(self, didMoveToPage: currentPage)
 
+      let pageView = pageViews[currentPage]
+      if pageView.imageView.image == nil && !pageView.isLoadingImage {
+        let lImage = pageView.image
+        if let image = lImage.image {
+          pageView.imageView.image = image
+          pageView.onImageLoaded(image: image)
+        } else if let imageUrl = lImage.imageURL {
+          pageView.isLoadingImage = true
+          LightboxConfig.loadImage(pageView.imageView, imageUrl, { (image) in
+            pageView.onImageLoaded(image: image)
+          })
+        }
+      }
+
       if let image = pageViews[currentPage].imageView.image, dynamicBackground {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.125) {
           self.loadDynamicBackground(image)
