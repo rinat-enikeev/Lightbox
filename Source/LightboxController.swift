@@ -103,6 +103,7 @@ open class LightboxController: UIViewController {
           pageView.isLoadingImage = true
           LightboxConfig.loadImage(pageView.imageView, imageUrl, { (image) in
             pageView.onImageLoaded(image: image)
+            pageView.isLoadingImage = false
           })
         }
       }
