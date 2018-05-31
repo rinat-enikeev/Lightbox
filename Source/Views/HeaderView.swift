@@ -15,6 +15,9 @@ open class HeaderView: UIView {
 
     button.setAttributedTitle(title, for: UIControlState())
 
+    button.setTitleShadowColor(UIColor.black, for: .normal)
+    button.titleLabel?.shadowOffset = CGSize(width: 1, height: 1)
+    
     if let size = LightboxConfig.CloseButton.size {
       button.frame.size = size
     } else {
